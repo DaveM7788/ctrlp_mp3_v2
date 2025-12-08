@@ -1,0 +1,6 @@
+[tool.basedpyright]
+typeCheckingMode = "standard"
+reportMissingSuperCall = false
+reportPrivateImportUsage = false
+reportOptionalSubscript = false
+reportOperatorIssue = false
