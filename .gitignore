@@ -255,3 +255,27 @@ __marimo__/
 .streamlit/secrets.toml
 
 small_helper.txt
+
+
+*.mp3
+*.ogg
+*.wav
+*.flac
+*.pdf
+*.mp4
+*.aac
+*.wma
+*.m4a
+*.m4p
+*.aiff
+*.alac
+*.oga
+*.mogg
+*.opus
+*.webm
+/assets/images/artwork/*.jpg
+/assets/images/artwork/*.jpeg
+/assets/images/artwork/*.png
+/assets/images/artwork/*.bmp
+/assets/js/fuzzy_match_data.js
+/assets/js/fuzzy_match_dataids.js
