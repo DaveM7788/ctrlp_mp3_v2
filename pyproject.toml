@@ -4,3 +4,4 @@ reportMissingSuperCall = false
 reportPrivateImportUsage = false
 reportOptionalSubscript = false
 reportOperatorIssue = false
+reportOptionalMemberAccess = false

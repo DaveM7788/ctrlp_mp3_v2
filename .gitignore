@@ -277,5 +277,13 @@ small_helper.txt
 /assets/images/artwork/*.jpeg
 /assets/images/artwork/*.png
 /assets/images/artwork/*.bmp
+/albumart/*/*.jpg
+/albumart/*/*.jpeg
+/albumart/*/*.png
+/albumart/*/*.bmp
+/albumart/*/*/*.jpg
+/albumart/*/*/*.jpeg
+/albumart/*/*/*.png
+/albumart/*/*/*.bmp
 /assets/js/fuzzy_match_data.js
 /assets/js/fuzzy_match_dataids.js
