@@ -1,13 +1,13 @@
 package main
 
 import (
+	"ctrlpmp3v2/pkg/utils"
 	"fmt"
 	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
 	"slices"
-	"strings"
 	"time"
 
 	"go.senan.xyz/taglib"
@@ -22,7 +22,7 @@ type AudioFile struct {
 }
 
 type AudioAlbum struct {
-	album        string
+	albumName    string
 	albumArtPath string
 }
 
@@ -53,7 +53,7 @@ func collectAudioFiles(rootPath string) {
 			return err
 		}
 
-		if strings.HasSuffix(path, ".mp3") {
+		if utils.IsAudioFileType(path) {
 			count += 1
 			songTitle := "Unknown"
 			artist := "Unknown"
@@ -67,18 +67,16 @@ func collectAudioFiles(rootPath string) {
 			if len(songNameSlice) != 0 {
 				songTitle = songNameSlice[0]
 			} else {
-				// take file name
+				songTitle = filepath.Base(path)
 			}
 
 			artistSlice := tags[taglib.AlbumArtist]
 			if len(artistSlice) != 0 {
-				fmt.Println("AlbumArtist: " + artistSlice[0])
 				artist = artistSlice[0]
 			}
 
 			albumSlice := tags[taglib.Album]
 			if len(albumSlice) != 0 {
-				fmt.Println("Album: " + albumSlice[0])
 				album = albumSlice[0]
 			}
 
@@ -91,7 +89,7 @@ func collectAudioFiles(rootPath string) {
 			}
 
 			albumInfo := AudioAlbum{
-				album:        album,
+				albumName:    album,
 				albumArtPath: "assets/images/controlp_sq_jpg.jpg",
 			}
 
@@ -101,7 +99,7 @@ func collectAudioFiles(rootPath string) {
 				filePath := directory + album + ".png"
 				dirErr := os.MkdirAll(directory, os.ModePerm)
 				if dirErr != nil {
-					fmt.Println("Error creating directory for album art")
+					fmt.Printf("Error creating directory for album art: %v\n", dirErr)
 				}
 				err := os.WriteFile(filePath, embeddedImg, os.ModePerm)
 				if err != nil {
@@ -112,14 +110,11 @@ func collectAudioFiles(rootPath string) {
 			}
 
 			AudioFiles = append(AudioFiles, audioFile)
-			fmt.Println("Added the following song name " + AudioFiles[0].songName)
-
 			if !slices.Contains(UniqueArtists, artist) {
 				UniqueArtists = append(UniqueArtists, artist)
 			}
-
 			for i := range UniqueAlbums {
-				if UniqueAlbums[i].album == album {
+				if UniqueAlbums[i].albumName == album {
 					continue
 				}
 				UniqueAlbums = append(UniqueAlbums, albumInfo)
@@ -135,18 +130,21 @@ func collectAudioFiles(rootPath string) {
 	if err != nil {
 		log.Fatalf("Error walking the directory: %v", err)
 	}
-	fmt.Printf("Found %f audio files.\n", count)
+	fmt.Printf("Found %d audio files.\n", count)
 }
 
 func generateAllAlbumsPage() {
 	for i := range UniqueAlbums {
-		albumName := UniqueAlbums[i]
-		fmt.Println("album name" + albumName.album)
+		album := UniqueAlbums[i]
+		fmt.Println("album name" + album.albumName)
 	}
 }
 
 func generateAllArtistsPage() {
-
+	for i := range UniqueArtists {
+		artist := UniqueArtists[i]
+		fmt.Println("artist" + artist)
+	}
 }
 
 func generateAllSongsPage() {
