@@ -22,6 +22,7 @@ type AudioFile struct {
 }
 
 type AudioAlbum struct {
+	artist       string
 	albumName    string
 	albumArtPath string
 }
@@ -89,6 +90,7 @@ func collectAudioFiles(rootPath string) {
 			}
 
 			albumInfo := AudioAlbum{
+				artist:       artist,
 				albumName:    album,
 				albumArtPath: "assets/images/controlp_sq_jpg.jpg",
 			}
@@ -113,16 +115,14 @@ func collectAudioFiles(rootPath string) {
 			if !slices.Contains(UniqueArtists, artist) {
 				UniqueArtists = append(UniqueArtists, artist)
 			}
-			for i := range UniqueAlbums {
-				if UniqueAlbums[i].albumName == album {
-					continue
-				}
+
+			if !uniqueAlbumsContainsAlbum(albumInfo) {
 				UniqueAlbums = append(UniqueAlbums, albumInfo)
 			}
 		}
 
 		generateAllAlbumsPage()
-		generateAllArtistsPage()
+		//generateAllArtistsPage()
 
 		return nil
 	})
@@ -131,6 +131,16 @@ func collectAudioFiles(rootPath string) {
 		log.Fatalf("Error walking the directory: %v", err)
 	}
 	fmt.Printf("Found %d audio files.\n", count)
+}
+
+func uniqueAlbumsContainsAlbum(albumInfo AudioAlbum) bool {
+	for i := range UniqueAlbums {
+		if UniqueAlbums[i].albumName == albumInfo.albumName &&
+			UniqueAlbums[i].artist == albumInfo.artist {
+			return true
+		}
+	}
+	return false
 }
 
 func generateAllAlbumsPage() {
